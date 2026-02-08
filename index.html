@@ -3,27 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LED-Show & Artistik | Magische Performances</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Dancing+Script:wght@400;600;700&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+    <title>Odins Hörner e.V. – LED-Show & Feuershow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Dancing+Script:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --fire-orange: #FF6B35;
-            --fire-red: #FF1744;
-            --fire-yellow: #FFD700;
-            --led-blue: #00D9FF;
-            --led-purple: #B24BF3;
-            --led-green: #00FF9F;
-            --led-pink: #FF6EC7;
-            --dark-bg: #0A0A0A;
-            --card-bg: #1A1A1A;
+            --cyan: #00D9FF;
+            --purple: #B24BF3;
+            --green: #00FF9F;
+            --pink: #FF6EC7;
+            --fire: #FF6A1A;
+            --fire-glow: #FFB347;
+            --earth-green: #4CAF50;
+            --air-silver: #C0D6DF;
+            --water-blue: #1E90FF;
+            --dark-bg: #0A0A0F;
+            --card-bg: #12121A;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Outfit', sans-serif;
             background: var(--dark-bg);
@@ -31,819 +27,500 @@
             overflow-x: hidden;
             line-height: 1.6;
         }
-        
-        /* Animated Background with LED particles */
-        .background-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.3;
-            animation: float 15s infinite ease-in-out;
-        }
-        
-        .glow-orb.led1 {
-            background: radial-gradient(circle, var(--led-blue), var(--led-purple));
-            width: 350px;
-            height: 350px;
-            top: 10%;
-            left: -10%;
-        }
-        
-        .glow-orb.led2 {
-            background: radial-gradient(circle, var(--led-purple), var(--led-pink));
-            width: 300px;
-            height: 300px;
-            bottom: 20%;
-            right: -5%;
-            animation-delay: -5s;
-        }
-        
-        .glow-orb.led3 {
-            background: radial-gradient(circle, var(--led-green), var(--led-blue));
-            width: 250px;
-            height: 250px;
-            top: 50%;
-            right: 10%;
-            animation-delay: -10s;
-        }
-        
-        /* LED Particles */
-        .led-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--led-blue);
-            border-radius: 50%;
-            box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
-            animation: sparkle 3s infinite ease-in-out;
-        }
-        
-        .led-particle:nth-child(4) { top: 20%; left: 10%; animation-delay: 0s; background: var(--led-blue); }
-        .led-particle:nth-child(5) { top: 40%; left: 80%; animation-delay: 0.5s; background: var(--led-purple); }
-        .led-particle:nth-child(6) { top: 60%; left: 15%; animation-delay: 1s; background: var(--led-green); }
-        .led-particle:nth-child(7) { top: 80%; left: 70%; animation-delay: 1.5s; background: var(--led-pink); }
-        .led-particle:nth-child(8) { top: 30%; left: 50%; animation-delay: 2s; background: var(--led-blue); }
-        .led-particle:nth-child(9) { top: 70%; left: 40%; animation-delay: 2.5s; background: var(--led-purple); }
-        .led-particle:nth-child(10) { top: 50%; left: 90%; animation-delay: 0.8s; background: var(--led-green); }
-        .led-particle:nth-child(11) { top: 10%; left: 60%; animation-delay: 1.8s; background: var(--led-pink); }
-        
-        @keyframes sparkle {
-            0%, 100% { 
-                opacity: 0.3;
-                transform: translateY(0) scale(1);
-            }
-            50% { 
-                opacity: 1;
-                transform: translateY(-20px) scale(1.5);
-            }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -30px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-        }
-        
+
+        /* Animated BG */
+        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.2; animation: orbFloat 20s infinite ease-in-out; }
+        .orb.o1 { background: radial-gradient(circle, var(--cyan), var(--purple)); width: 400px; height: 400px; top: -5%; left: -10%; }
+        .orb.o2 { background: radial-gradient(circle, var(--fire), var(--pink)); width: 350px; height: 350px; bottom: 10%; right: -8%; animation-delay: -7s; }
+        .orb.o3 { background: radial-gradient(circle, var(--green), var(--cyan)); width: 280px; height: 280px; top: 45%; left: 50%; animation-delay: -14s; }
+        @keyframes orbFloat { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-40px) scale(1.15); } 66% { transform: translate(-30px,30px) scale(0.9); } }
+
+        .sparkle { position: absolute; width: 3px; height: 3px; background: var(--cyan); border-radius: 50%; box-shadow: 0 0 8px currentColor, 0 0 16px currentColor; animation: twinkle 4s infinite ease-in-out; }
+        .sparkle:nth-child(4) { top: 15%; left: 8%; color: var(--cyan); }
+        .sparkle:nth-child(5) { top: 35%; left: 85%; animation-delay: 0.7s; color: var(--purple); }
+        .sparkle:nth-child(6) { top: 55%; left: 12%; animation-delay: 1.4s; color: var(--fire); }
+        .sparkle:nth-child(7) { top: 75%; left: 75%; animation-delay: 2.1s; color: var(--pink); }
+        .sparkle:nth-child(8) { top: 25%; left: 55%; animation-delay: 2.8s; color: var(--cyan); }
+        .sparkle:nth-child(9) { top: 65%; left: 35%; animation-delay: 3.5s; color: var(--fire-glow); }
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 1; transform: scale(2); } }
+
         /* Header */
-        header {
-            padding: 40px 20px 20px;
-            text-align: center;
-            position: relative;
-            animation: fadeInDown 1s ease-out;
+        header { padding: 40px 20px 15px; text-align: center; animation: fadeDown 1s ease-out; }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .logo-img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid rgba(0,217,255,0.3); margin-bottom: 12px; object-fit: cover; box-shadow: 0 0 30px rgba(0,217,255,0.15); }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 3.2rem; font-weight: 700; background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink)); background-size: 300% 300%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: gradShift 5s ease infinite; margin-bottom: 6px; }
+        @keyframes gradShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .tagline { font-size: 0.8rem; color: #888; letter-spacing: 4px; text-transform: uppercase; font-weight: 300; }
+
+        /* Hero */
+        .hero { padding: 30px 20px 40px; text-align: center; animation: fadeUp 1s ease-out 0.3s both; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 2.4rem; line-height: 1.3; margin-bottom: 18px; font-weight: 600; }
+        .hl-cyan { font-family: 'Dancing Script', cursive; color: var(--cyan); text-shadow: 0 0 25px rgba(0,217,255,0.5); font-size: 3rem; }
+        .hl-purple { font-family: 'Dancing Script', cursive; color: var(--purple); text-shadow: 0 0 25px rgba(178,75,243,0.5); font-size: 3rem; }
+        .hl-pink { font-family: 'Dancing Script', cursive; color: var(--pink); text-shadow: 0 0 25px rgba(255,110,199,0.5); font-size: 3rem; }
+        .hl-fire { font-family: 'Dancing Script', cursive; color: var(--fire); text-shadow: 0 0 25px rgba(255,106,26,0.5); font-size: 3rem; }
+        .hero p { font-size: 1rem; color: #BBB; max-width: 640px; margin: 0 auto; line-height: 1.8; }
+
+        /* Photo Showcase */
+        .photo-strip { padding: 0 20px; max-width: 1200px; margin: 0 auto 50px; overflow: hidden; }
+        .photo-scroll { display: flex; gap: 12px; animation: scrollPhotos 30s linear infinite; width: max-content; }
+        .photo-scroll img { height: 200px; border-radius: 16px; object-fit: cover; flex-shrink: 0; opacity: 0.85; transition: all 0.4s ease; border: 1px solid rgba(255,255,255,0.08); }
+        .photo-scroll img:hover { opacity: 1; transform: scale(1.03); box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+        @keyframes scrollPhotos { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Section basics */
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; text-align: center; margin-bottom: 12px; font-weight: 600; }
+        .section-sub { text-align: center; color: #999; font-size: 0.92rem; margin-bottom: 45px; max-width: 550px; margin-left: auto; margin-right: auto; }
+
+        /* Element Cards */
+        .elements { padding: 50px 20px; max-width: 1200px; margin: 0 auto; }
+        .elements-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .element-card { background: var(--card-bg); border-radius: 24px; padding: 30px 24px; position: relative; overflow: hidden; transition: all 0.4s ease; border: 1px solid rgba(255,255,255,0.05); }
+        .element-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .elem-num { position: absolute; top: -10px; right: 12px; font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 700; line-height: 1; pointer-events: none; }
+        .elem-icon { font-size: 2.5rem; margin-bottom: 14px; display: block; position: relative; z-index: 1; }
+        .elem-title { font-family: 'Dancing Script', cursive; font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; position: relative; z-index: 1; }
+        .elem-desc { color: #AAA; font-size: 0.88rem; line-height: 1.7; position: relative; z-index: 1; }
+        .elem-photo { width: 100%; height: 120px; object-fit: cover; border-radius: 12px; margin-top: 15px; opacity: 0.8; transition: opacity 0.3s; position: relative; z-index: 1; }
+        .elem-photo:hover { opacity: 1; }
+        .elem-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px; position: relative; z-index: 1; }
+        .elem-tags span { padding: 3px 10px; border-radius: 20px; font-size: 0.68rem; font-weight: 500; }
+
+        /* Card variants */
+        .card-earth { border-top: 3px solid var(--earth-green); }
+        .card-earth::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top left, rgba(76,175,80,0.08), transparent 60%); pointer-events: none; }
+        .card-earth .elem-icon, .card-earth .elem-title { color: var(--earth-green); }
+        .card-earth .elem-title { text-shadow: 0 0 15px rgba(76,175,80,0.4); }
+        .card-earth .elem-num { color: rgba(76,175,80,0.12); }
+        .card-earth .elem-tags span { background: rgba(76,175,80,0.12); border: 1px solid rgba(76,175,80,0.25); color: #8BC34A; }
+
+        .card-air { border-top: 3px solid var(--air-silver); }
+        .card-air::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top left, rgba(192,214,223,0.08), transparent 60%); pointer-events: none; }
+        .card-air .elem-icon, .card-air .elem-title { color: var(--air-silver); }
+        .card-air .elem-title { text-shadow: 0 0 15px rgba(192,214,223,0.4); }
+        .card-air .elem-num { color: rgba(192,214,223,0.1); }
+        .card-air .elem-tags span { background: rgba(192,214,223,0.1); border: 1px solid rgba(192,214,223,0.2); color: #C0D6DF; }
+
+        .card-water { border-top: 3px solid var(--water-blue); }
+        .card-water::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top left, rgba(30,144,255,0.08), transparent 60%); pointer-events: none; }
+        .card-water .elem-icon, .card-water .elem-title { color: var(--water-blue); }
+        .card-water .elem-title { text-shadow: 0 0 15px rgba(30,144,255,0.4); }
+        .card-water .elem-num { color: rgba(30,144,255,0.1); }
+        .card-water .elem-tags span { background: rgba(30,144,255,0.12); border: 1px solid rgba(30,144,255,0.25); color: #64B5F6; }
+
+        .card-fire { border-top: 3px solid var(--fire); }
+        .card-fire::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top left, rgba(255,106,26,0.1), transparent 60%); pointer-events: none; }
+        .card-fire .elem-icon, .card-fire .elem-title { color: var(--fire); }
+        .card-fire .elem-title { text-shadow: 0 0 15px rgba(255,106,26,0.5); }
+        .card-fire .elem-num { color: rgba(255,106,26,0.1); }
+        .card-fire .elem-tags span { background: rgba(255,106,26,0.12); border: 1px solid rgba(255,106,26,0.25); color: var(--fire-glow); }
+        .card-fire .zuckerl { position: absolute; top: 12px; right: 12px; background: var(--fire); color: #fff; padding: 3px 12px; border-radius: 20px; font-size: 0.65rem; font-weight: 600; letter-spacing: 1px; z-index: 2; animation: pulseGlow 2s ease-in-out infinite; }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 8px rgba(255,106,26,0.4); } 50% { box-shadow: 0 0 20px rgba(255,106,26,0.7); } }
+
+        /* Flow Section */
+        .flow-section { padding: 50px 20px; max-width: 900px; margin: 0 auto; }
+        .flow-banner { background: var(--card-bg); border-radius: 24px; padding: 35px; border: 1px solid rgba(0,217,255,0.15); position: relative; overflow: hidden; }
+        .flow-banner::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,217,255,0.04), rgba(178,75,243,0.04)); pointer-events: none; }
+        .flow-grid { display: grid; grid-template-columns: auto 1fr; gap: 18px 25px; align-items: start; }
+        .flow-icon { font-size: 2.2rem; animation: pulse 3s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .flow-content h3 { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 600; margin-bottom: 8px; color: var(--cyan); }
+        .flow-content p { color: #AAA; font-size: 0.92rem; line-height: 1.8; }
+        .flow-divider { grid-column: 1 / -1; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); }
+
+        /* WOW */
+        .wow-section { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+        .wow-card { background: linear-gradient(135deg, rgba(178,75,243,0.1), rgba(0,217,255,0.08)); border: 2px solid rgba(178,75,243,0.3); border-radius: 24px; padding: 35px; text-align: center; transition: all 0.4s ease; }
+        .wow-card:hover { border-color: rgba(178,75,243,0.5); box-shadow: 0 0 50px rgba(178,75,243,0.15); transform: translateY(-4px); }
+        .wow-card h3 { font-family: 'Dancing Script', cursive; font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, var(--cyan), var(--purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+        .wow-card p { color: #BBB; font-size: 0.95rem; line-height: 1.8; max-width: 600px; margin: 0 auto; }
+        .wow-badges { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .wow-badges span { padding: 6px 18px; border-radius: 25px; font-size: 0.78rem; font-weight: 500; background: rgba(0,217,255,0.1); border: 1px solid rgba(0,217,255,0.25); color: var(--cyan); }
+
+        /* Pricing */
+        .pricing { padding: 50px 20px; max-width: 900px; margin: 0 auto; }
+        .pricing-box { background: var(--card-bg); border-radius: 28px; padding: 40px 32px; border: 2px solid rgba(0,217,255,0.15); position: relative; overflow: hidden; }
+        .pricing-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at top right, rgba(178,75,243,0.06), transparent); pointer-events: none; }
+        .pricing-header { text-align: center; margin-bottom: 30px; }
+        .pricing-header h2 { font-family: 'Dancing Script', cursive; font-size: 2.3rem; background: linear-gradient(135deg, var(--cyan), var(--purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; font-weight: 700; }
+        .pricing-header p { color: #888; font-size: 0.88rem; }
+        .price-list { display: flex; flex-direction: column; gap: 10px; position: relative; z-index: 1; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); background: rgba(255,255,255,0.02); transition: all 0.3s ease; }
+        .price-row:hover { background: rgba(255,255,255,0.04); transform: translateX(4px); }
+        .price-row.main { background: rgba(0,217,255,0.08); border: 2px solid rgba(0,217,255,0.25); }
+        .price-row.fire-main { background: rgba(255,106,26,0.08); border: 2px solid rgba(255,106,26,0.25); }
+        .price-row.optional { background: rgba(178,75,243,0.06); border: 1px solid rgba(178,75,243,0.2); }
+        .price-label h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: #EEE; margin-bottom: 3px; }
+        .price-row.main .price-label h4 { color: var(--cyan); }
+        .price-row.fire-main .price-label h4 { color: var(--fire); }
+        .price-row.optional .price-label h4 { color: var(--purple); }
+        .price-label p { color: #888; font-size: 0.8rem; }
+        .price-amount { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.5rem; white-space: nowrap; margin-left: 15px; }
+        .price-row.main .price-amount { color: var(--cyan); text-shadow: 0 0 12px rgba(0,217,255,0.3); }
+        .price-row.fire-main .price-amount { color: var(--fire); text-shadow: 0 0 12px rgba(255,106,26,0.3); }
+        .price-row.optional .price-amount { font-size: 1.2rem; color: var(--purple); text-shadow: 0 0 12px rgba(178,75,243,0.3); }
+        .price-row.included .price-amount { font-size: 1rem; color: var(--green); text-shadow: none; }
+        .price-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 8px 0; }
+        .price-note { margin-top: 20px; padding: 16px 20px; background: rgba(0,217,255,0.04); border-radius: 14px; border-left: 3px solid var(--cyan); }
+        .price-note p { color: #BBB; font-size: 0.82rem; line-height: 1.7; }
+        .price-note strong { color: var(--cyan); }
+        .price-note.fire-note { border-left-color: var(--fire); background: rgba(255,106,26,0.04); }
+        .price-note.fire-note strong { color: var(--fire); }
+
+        /* Features */
+        .features { padding: 50px 20px; max-width: 1100px; margin: 0 auto; }
+        .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 35px; }
+        .feat-item { background: rgba(255,255,255,0.02); padding: 24px; border-radius: 18px; border-left: 3px solid var(--cyan); transition: all 0.3s ease; }
+        .feat-item:hover { background: rgba(255,255,255,0.04); transform: translateX(4px); }
+        .feat-item:nth-child(2) { border-left-color: var(--purple); }
+        .feat-item:nth-child(3) { border-left-color: var(--fire); }
+        .feat-item:nth-child(4) { border-left-color: var(--green); }
+        .feat-item h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 8px; }
+        .feat-item p { color: #999; font-size: 0.88rem; line-height: 1.7; }
+
+        /* Safety / AGB */
+        .safety-section { padding: 40px 20px; max-width: 900px; margin: 0 auto; }
+        .safety-card { background: var(--card-bg); border-radius: 20px; padding: 30px; border: 1px solid rgba(255,106,26,0.2); }
+        .safety-card h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--fire); margin-bottom: 12px; }
+        .safety-card p { color: #AAA; font-size: 0.88rem; line-height: 1.8; }
+        .safety-list { list-style: none; margin-top: 15px; }
+        .safety-list li { padding: 8px 0; padding-left: 20px; position: relative; color: #BBB; font-size: 0.85rem; line-height: 1.6; }
+        .safety-list li::before { content: '🔥'; position: absolute; left: 0; top: 8px; font-size: 0.75rem; }
+
+        /* CTA */
+        .cta { padding: 60px 20px 35px; text-align: center; background: linear-gradient(180deg, transparent, rgba(0,217,255,0.04)); }
+        .cta h2 { font-family: 'Dancing Script', cursive; font-size: 2.3rem; font-weight: 700; background: linear-gradient(135deg, var(--cyan), var(--purple), var(--fire)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 12px; }
+        .cta p { color: #AAA; font-size: 1rem; max-width: 520px; margin: 0 auto 25px; line-height: 1.8; }
+        .cta-link { display: inline-block; padding: 13px 32px; border-radius: 30px; background: linear-gradient(135deg, var(--cyan), var(--purple)); color: #FFF; text-decoration: none; font-weight: 600; font-size: 0.92rem; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(0,217,255,0.3); cursor: pointer; border: none; }
+        .cta-link:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,217,255,0.4); }
+
+        /* Contact Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-overlay.active { display: flex; animation: modalFadeIn 0.3s ease; }
+        @keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-card { position: relative; max-width: 480px; width: 90%; border-radius: 28px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.6); animation: modalSlideUp 0.4s ease; }
+        @keyframes modalSlideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-photo { width: 100%; height: 180px; object-fit: cover; display: block; }
+        .modal-photo-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 180px; background: linear-gradient(180deg, transparent 40%, var(--card-bg) 100%); pointer-events: none; }
+        .modal-body { background: var(--card-bg); padding: 30px 35px 35px; border: 1px solid rgba(0,217,255,0.15); border-top: none; border-radius: 0 0 28px 28px; }
+        .modal-body h3 { font-family: 'Dancing Script', cursive; font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, var(--cyan), var(--purple)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px; }
+        .modal-body .modal-role { color: #888; font-size: 0.82rem; margin-bottom: 22px; }
+        .modal-contact-item { display: flex; align-items: center; gap: 14px; padding: 14px 18px; margin-bottom: 10px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; text-decoration: none; color: inherit; }
+        .modal-contact-item:hover { background: rgba(0,217,255,0.06); border-color: rgba(0,217,255,0.2); transform: translateX(4px); }
+        .modal-contact-icon { font-size: 1.4rem; flex-shrink: 0; }
+        .modal-contact-text { display: flex; flex-direction: column; }
+        .modal-contact-text .label { font-size: 0.72rem; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .modal-contact-text .value { font-size: 0.95rem; color: #DDD; font-weight: 500; }
+        .modal-close { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; border-radius: 50%; border: none; background: rgba(0,0,0,0.5); color: #fff; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 2; backdrop-filter: blur(4px); }
+        .modal-close:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); }
+
+        footer { padding: 25px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        footer p { color: #555; font-size: 0.78rem; line-height: 1.8; }
+        footer a { color: #777; text-decoration: none; }
+        footer a:hover { color: var(--cyan); }
+
+        /* Responsive */
+        @media (max-width: 1000px) { .elements-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 700px) {
+            .elements-grid { grid-template-columns: 1fr; max-width: 450px; margin: 0 auto; }
+            .features-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.7rem; }
+            .hl-cyan, .hl-purple, .hl-pink, .hl-fire { font-size: 2.2rem; }
+            .logo { font-size: 2.4rem; }
+            .flow-grid { grid-template-columns: 1fr; text-align: center; }
+            .flow-icon { margin: 0 auto; }
+            .photo-scroll img { height: 150px; }
         }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--led-blue), var(--led-purple), var(--led-pink));
-            background-size: 300% 300%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradientShift 4s ease infinite;
-            margin-bottom: 10px;
-        }
-        
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-        
-        .tagline {
-            font-size: 0.95rem;
-            color: #AAAAAA;
-            font-weight: 300;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-family: 'Outfit', sans-serif;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* Hero Text with small image accent */
-        .hero {
-            padding: 40px 20px;
-            text-align: center;
-            position: relative;
-            animation: fadeInUp 1s ease-out 0.3s both;
-        }
-        
-        .hero-content {
-            position: relative;
-            display: inline-block;
-        }
-        
-        .hero-accent-img {
-            position: absolute;
-            top: -20px;
-            right: -80px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--fire-orange);
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
-            animation: floatAccent 4s ease-in-out infinite;
-            opacity: 0.8;
-            display: none;
-        }
-        
-        @keyframes floatAccent {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(5deg); }
-        }
-        
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            line-height: 1.3;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        
-        .hero .highlight-led {
-            font-family: 'Dancing Script', cursive;
-            color: var(--led-blue);
-            text-shadow: 0 0 20px rgba(0, 217, 255, 0.6);
-            font-size: 2.8rem;
-        }
-        
-        .hero .highlight-purple {
-            font-family: 'Dancing Script', cursive;
-            color: var(--led-purple);
-            text-shadow: 0 0 20px rgba(178, 75, 243, 0.6);
-            font-size: 2.8rem;
-        }
-        
-        .hero p {
-            font-size: 1.05rem;
-            color: #CCCCCC;
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.7;
-        }
-        
-        /* Services Grid */
-        .services {
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            text-align: center;
-            margin-bottom: 40px;
-            font-weight: 600;
-            animation: fadeInUp 1s ease-out 0.5s both;
-        }
-        
-        .services-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 30px;
-            animation: fadeInUp 1s ease-out 0.7s both;
-        }
-        
-        .service-card {
-            background: var(--card-bg);
-            border-radius: 25px;
-            padding: 35px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s ease;
-        }
-        
-        .service-card.main {
-            border: 2px solid rgba(0, 217, 255, 0.3);
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(178, 75, 243, 0.05));
-        }
-        
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--led-blue), var(--led-purple), transparent);
-            animation: shimmer 3s infinite;
-        }
-        
-        .service-card.pole::before {
-            background: linear-gradient(90deg, transparent, var(--led-pink), var(--led-purple), transparent);
-        }
-        
-        .service-card.fire::before {
-            background: linear-gradient(90deg, transparent, var(--fire-orange), transparent);
-        }
-        
-        /* LED Glow Effect on Cards */
-        .service-card::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle, var(--led-blue), transparent);
-            border-radius: 50%;
-            opacity: 0;
-            transform: translate(-50%, -50%);
-            transition: opacity 0.5s ease;
-            pointer-events: none;
-            filter: blur(50px);
-        }
-        
-        .service-card.pole::after {
-            background: radial-gradient(circle, var(--led-pink), transparent);
-        }
-        
-        .service-card:hover::after {
-            opacity: 0.3;
-        }
-        
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        .service-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-        }
-        
-        .service-icon {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            display: block;
-            animation: bounce 2s ease-in-out infinite;
-        }
-        
-        .service-card.main .service-icon {
-            font-size: 4rem;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .service-card h3 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        
-        .service-card.main h3 {
-            font-size: 2.5rem;
-            color: var(--led-blue);
-            text-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-        }
-        
-        .service-card.pole h3 {
-            color: var(--led-pink);
-            text-shadow: 0 0 15px rgba(255, 110, 199, 0.4);
-        }
-        
-        .service-card.fire h3 {
-            color: var(--fire-orange);
-            text-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
-        }
-        
-        .service-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--led-blue), var(--led-purple));
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-        }
-        
-        .service-card p {
-            color: #AAAAAA;
-            font-size: 1rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-        
-        .service-card.main p {
-            color: #CCCCCC;
-            font-size: 1.05rem;
-        }
-        
-        .service-features {
-            list-style: none;
-            margin-top: 25px;
-        }
-        
-        .service-features li {
-            padding: 10px 0;
-            color: #CCCCCC;
-            font-size: 0.95rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .service-features li::before {
-            content: '✨';
-            margin-right: 12px;
-            font-size: 1.2rem;
-        }
-        
-        .service-card.pole .service-features li::before {
-            content: '💫';
-        }
-        
-        .service-card.fire .service-features li::before {
-            content: '🔥';
-        }
-        
-        /* Pricing Section */
-        .pricing {
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            animation: fadeInUp 1s ease-out 0.9s both;
-        }
-        
-        .pricing-container {
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(178, 75, 243, 0.08));
-            border-radius: 30px;
-            padding: 40px 30px;
-            border: 2px solid rgba(0, 217, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .pricing-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at top right, rgba(178, 75, 243, 0.1), transparent);
-            pointer-events: none;
-        }
-        
-        .pricing-header {
-            text-align: center;
-            margin-bottom: 35px;
-        }
-        
-        .pricing-header h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--led-blue), var(--led-purple));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .pricing-header p {
-            color: #AAAAAA;
-            font-size: 0.95rem;
-        }
-        
-        .pricing-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .price-item {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 25px;
-            border-radius: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .price-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
-        }
-        
-        .price-item.main-price {
-            background: rgba(0, 217, 255, 0.1);
-            border: 2px solid rgba(0, 217, 255, 0.3);
-        }
-        
-        .price-info {
-            flex: 1;
-        }
-        
-        .price-info h4 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
-            color: white;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-        
-        .price-item.main-price h4 {
-            color: var(--led-blue);
-        }
-        
-        .price-info p {
-            color: #AAAAAA;
-            font-size: 0.9rem;
-            line-height: 1.6;
-        }
-        
-        .price-tag {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--led-blue);
-            text-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
-            white-space: nowrap;
-            margin-left: 20px;
-        }
-        
-        .price-item.optional .price-tag {
-            font-size: 1.5rem;
-            color: var(--led-purple);
-            text-shadow: 0 0 15px rgba(178, 75, 243, 0.3);
-        }
-        
-        .price-item.flexible .price-tag {
-            font-size: 1.2rem;
-            color: #CCCCCC;
-            text-shadow: none;
-        }
-        
-        .price-note {
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(0, 217, 255, 0.05);
-            border-radius: 15px;
-            border-left: 4px solid var(--led-blue);
-        }
-        
-        .price-note p {
-            color: #CCCCCC;
-            font-size: 0.9rem;
-            line-height: 1.7;
-            margin: 0;
-        }
-        
-        .price-note strong {
-            color: var(--led-blue);
-        }
-        
-        /* Features Section */
-        .features {
-            padding: 50px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 25px;
-            margin-top: 30px;
-        }
-        
-        .feature-item {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 30px;
-            border-radius: 20px;
-            border-left: 4px solid var(--led-blue);
-            animation: fadeInUp 1s ease-out both;
-            transition: all 0.3s ease;
-        }
-        
-        .feature-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-            transform: translateX(5px);
-        }
-        
-        .feature-item:nth-child(1) { animation-delay: 1.1s; }
-        .feature-item:nth-child(2) { animation-delay: 1.2s; border-left-color: var(--led-purple); }
-        .feature-item:nth-child(3) { animation-delay: 1.3s; border-left-color: var(--led-pink); }
-        .feature-item:nth-child(4) { animation-delay: 1.4s; border-left-color: var(--led-green); }
-        
-        .feature-item h4 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-            color: white;
-        }
-        
-        .feature-item p {
-            color: #AAAAAA;
-            font-size: 0.95rem;
-            line-height: 1.7;
-        }
-        
-        /* CTA Section */
-        .cta-section {
-            padding: 60px 20px;
-            text-align: center;
-            background: linear-gradient(180deg, transparent, rgba(0, 217, 255, 0.05));
-            animation: fadeInUp 1s ease-out 1.5s both;
-        }
-        
-        .cta-section h2 {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, var(--led-blue), var(--led-purple), var(--led-pink));
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-        
-        .cta-section p {
-            color: #CCCCCC;
-            font-size: 1.1rem;
-            max-width: 500px;
-            margin: 0 auto;
-            line-height: 1.7;
-        }
-        
-        /* Tablet and Desktop */
         @media (min-width: 768px) {
-            .services-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .hero h1 {
-                font-size: 2.8rem;
-            }
-            
-            .hero .highlight-led,
-            .hero .highlight-purple {
-                font-size: 3.5rem;
-            }
-            
-            .logo {
-                font-size: 4rem;
-            }
-            
-            .hero-accent-img {
-                display: block;
-                right: -100px;
-                width: 80px;
-                height: 80px;
-            }
-            
-            .pricing-grid {
-                gap: 25px;
-            }
+            .hero h1 { font-size: 2.6rem; }
+            .hl-cyan, .hl-purple, .hl-pink, .hl-fire { font-size: 3.2rem; }
+            .logo { font-size: 3.8rem; }
         }
-        
-        @media (min-width: 1024px) {
-            .services-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .service-card.main {
-                grid-column: 1 / -1;
-            }
-        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
-    <div class="background-glow">
-        <div class="glow-orb led1"></div>
-        <div class="glow-orb led2"></div>
-        <div class="glow-orb led3"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
-        <div class="led-particle"></div>
+    <div class="bg-glow">
+        <div class="orb o1"></div>
+        <div class="orb o2"></div>
+        <div class="orb o3"></div>
+        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
+        <div class="sparkle"></div><div class="sparkle"></div><div class="sparkle"></div>
     </div>
-    
+
     <header>
-        <div class="logo">Lichtspiel & Artistik</div>
-        <p class="tagline">LED · Pole · Magie</p>
+        <img src="Logo.jpg" alt="Odins Hörner e.V. Logo" class="logo-img">
+        <div class="logo">Odins Hörner e.V.</div>
+        <p class="tagline">LED · Feuer · Wikinger-Kultur</p>
     </header>
-    
+
     <section class="hero">
-        <div class="hero-content">
-            <img src="feuershow-image.png" alt="Performance" class="hero-accent-img">
-            <h1>
-                Erlebe spektakuläre<br>
-                <span class="highlight-led">LED</span>-Shows & 
-                <span class="highlight-purple">Artistik</span>
-            </h1>
-        </div>
+        <h1>
+            Vier Elemente. Eine Show.<br>
+            <span class="hl-cyan">Erde</span> ·
+            <span class="hl-purple">Luft</span> ·
+            <span class="hl-pink">Wasser</span> ·
+            <span class="hl-fire">Feuer</span>
+        </h1>
         <p>
-            Unsere Künstler verwandeln euer Event in ein leuchtendes Spektakel voller Farben, 
-            Bewegung und unvergesslicher Momente.
+            Eine spektakuläre LED- &amp; Feuershow in vier Akten – choreografiert für Ihre
+            Baumarkteröffnung. Eleganz trifft auf Entertainment, Licht trifft auf Flammen.
+            Ein Erlebnis, das Ihre Gäste nicht vergessen werden.
         </p>
     </section>
-    
-    <section class="services">
-        <h2 class="section-title">Unser Angebot</h2>
-        <div class="services-grid">
-            <div class="service-card main">
-                <span class="service-badge">Hauptprogramm</span>
-                <span class="service-icon">✨</span>
-                <h3>LED-Shows</h3>
-                <p>
-                    Unsere Spezialität! Futuristische Lichtchoreografien mit professionellem Equipment 
-                    und individuellen Programmierungen. Jede Show wird speziell für euer Event kreiert 
-                    und bringt eure Gäste zum Staunen.
-                </p>
-                <ul class="service-features">
-                    <li>LED-Poi & Pixel-Poi mit Programmierung</li>
-                    <li>LED-Wings & Leuchtende Kostüme</li>
-                    <li>Synchronisierte Lichteffekte</li>
-                    <li>Logo & Schriftzug-Darstellung</li>
-                    <li>Indoor & Outdoor geeignet</li>
-                    <li>Individuelle Choreografien</li>
-                </ul>
+
+    <!-- Photo Strip -->
+    <div class="photo-strip">
+        <div class="photo-scroll">
+            <img src="Fotos/1.jpg" alt="LED-Flügel Performance">
+            <img src="Fotos/4.jpg" alt="Feuershow Artistin">
+            <img src="Fotos/8.jpg" alt="LED-Bühnenshow">
+            <img src="Fotos/5.jpg" alt="LED-Kostüm Performance">
+            <img src="Fotos/6.jpg" alt="Feuershow Ensemble">
+            <img src="Fotos/7.jpg" alt="LED-Hoop Tänzerin">
+            <img src="Fotos/2.jpg" alt="LED-Flügel lila">
+            <img src="Fotos/3.jpg" alt="Feuerartistinnen">
+            <!-- Duplicate for seamless scroll -->
+            <img src="Fotos/1.jpg" alt="LED-Flügel Performance">
+            <img src="Fotos/4.jpg" alt="Feuershow Artistin">
+            <img src="Fotos/8.jpg" alt="LED-Bühnenshow">
+            <img src="Fotos/5.jpg" alt="LED-Kostüm Performance">
+            <img src="Fotos/6.jpg" alt="Feuershow Ensemble">
+            <img src="Fotos/7.jpg" alt="LED-Hoop Tänzerin">
+            <img src="Fotos/2.jpg" alt="LED-Flügel lila">
+            <img src="Fotos/3.jpg" alt="Feuerartistinnen">
+        </div>
+    </div>
+
+    <!-- Vier Elemente -->
+    <section class="elements">
+        <h2 class="section-title reveal">Die vier Elemente der Show</h2>
+        <p class="section-sub reveal">Jedes Element erzählt seine eigene Geschichte – verbunden durch zwei charmante Moderatoren, die Ihr Publikum durch den Abend führen.</p>
+
+        <div class="elements-grid">
+            <div class="element-card card-earth reveal">
+                <span class="elem-num">I</span>
+                <span class="elem-icon">🌿</span>
+                <h3 class="elem-title">Erde</h3>
+                <p class="elem-desc">Tanzende Blumen erwachen zum Leben. Beleuchtete Bühnenbilder verschmelzen mit eleganter Licht- und Tanzperformance.</p>
+                <img src="Fotos/5.jpg" alt="Erde – LED-Tanzperformance" class="elem-photo">
+                <div class="elem-tags"><span>Tanzperformance</span><span>Bühnenbild</span><span>Lichteffekte</span></div>
             </div>
-            
-            <div class="service-card pole">
-                <span class="service-icon">💫</span>
-                <h3>Pole Dance</h3>
-                <p>
-                    Elegante und kraftvolle Pole-Performances, die Akrobatik mit künstlerischem 
-                    Ausdruck verbinden. Perfekt für besondere Highlights auf eurem Event.
-                </p>
-                <ul class="service-features">
-                    <li>Artistik & Akrobatik</li>
-                    <li>Elegante Choreografien</li>
-                    <li>Verschiedene Schwierigkeitsgrade</li>
-                    <li>Optional mit LED-Beleuchtung</li>
-                </ul>
+
+            <div class="element-card card-air reveal">
+                <span class="elem-num">II</span>
+                <span class="elem-icon">💨</span>
+                <h3 class="elem-title">Luft</h3>
+                <p class="elem-desc">Elegante Tänzerinnen treffen auf humorvolle Begleitung mit Werkzeug – passend zum Baumarktthema. Grazie trifft Augenzwinkern.</p>
+                <img src="Fotos/2.jpg" alt="Luft – LED-Flügel" class="elem-photo">
+                <div class="elem-tags"><span>Eleganz &amp; Humor</span><span>Baumarkt-Thema</span></div>
             </div>
-            
-            <div class="service-card fire">
-                <span class="service-icon">🔥</span>
-                <h3>Feuershow</h3>
-                <p>
-                    Auf Wunsch bieten wir auch klassische Feuershows an – für Outdoor-Events 
-                    und besondere Anlässe. Eine magische Ergänzung zum LED-Programm.
-                </p>
-                <ul class="service-features">
-                    <li>Feuer-Jonglage & Poi</li>
-                    <li>Spektakuläre Feuereffekte</li>
-                    <li>Nur für Outdoor geeignet</li>
-                    <li>Optionale Ergänzung</li>
-                </ul>
+
+            <div class="element-card card-water reveal">
+                <span class="elem-num">III</span>
+                <span class="elem-icon">🌊</span>
+                <h3 class="elem-title">Wasser</h3>
+                <p class="elem-desc">LED-Hoop-Performances und Fächertänzerinnen erschaffen fließende Lichtchoreografien. Ein leuchtender Höhepunkt.</p>
+                <img src="Fotos/7.jpg" alt="Wasser – LED-Hoop" class="elem-photo">
+                <div class="elem-tags"><span>LED-Hoops</span><span>Fächertanz</span><span>Finale</span></div>
+            </div>
+
+            <div class="element-card card-fire reveal">
+                <span class="zuckerl">ZUCKERL</span>
+                <span class="elem-num">IV</span>
+                <span class="elem-icon">🔥</span>
+                <h3 class="elem-title">Feuer</h3>
+                <p class="elem-desc">Ca. 15 Darsteller entfesseln ein spektakuläres Feuer-Finale (Outdoor). Auch einzeln buchbar!</p>
+                <img src="Fotos/6.jpg" alt="Feuer – Feuershow" class="elem-photo">
+                <div class="elem-tags"><span>15 Darsteller</span><span>Outdoor</span><span>Zubuchbar</span></div>
             </div>
         </div>
     </section>
-    
+
+    <!-- Ablauf -->
+    <section class="flow-section">
+        <div class="flow-banner reveal">
+            <div class="flow-grid">
+                <div class="flow-icon">🎙️</div>
+                <div class="flow-content">
+                    <h3>Zwei Moderatoren führen durch den Abend</h3>
+                    <p>Zwischen den Show-Parts sorgen zwei erfahrene Performer für fließende Übergänge, unterhaltsame Einlagen und eine persönliche Verbindung zum Publikum. Jeder Part dauert 5–10 Minuten.</p>
+                </div>
+                <div class="flow-divider"></div>
+                <div class="flow-icon">🎭</div>
+                <div class="flow-content">
+                    <h3>Tanz, Eleganz und charmanter Blödsinn</h3>
+                    <p>Unsere Show verbindet elegante Tanzperformance mit humorvollen Elementen zu einem Programm, das alle Gäste begeistert. Ca. 10 Artisten (LED) + optional 15 Darsteller (Feuer).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WOW -->
+    <section class="wow-section">
+        <div class="wow-card reveal">
+            <h3>Ihr Logo in Licht</h3>
+            <p>Mit unseren Visual Pois können wir Ihre Werbung – Bilder, Texte, Logos – als beeindruckendes LED-Feature direkt in die Show integrieren.</p>
+            <div class="wow-badges"><span>Eigene Bilder</span><span>Texte &amp; Slogans</span><span>Firmenlogo</span><span>WOW-Effekt</span></div>
+        </div>
+    </section>
+
+    <!-- Preise -->
     <section class="pricing">
-        <div class="pricing-container">
+        <div class="pricing-box reveal">
             <div class="pricing-header">
                 <h2>Preisübersicht</h2>
-                <p>Transparente Kosten für euer unvergessliches Event</p>
+                <p>Transparent und fair – alles Wichtige inklusive</p>
             </div>
-            
-            <div class="pricing-grid">
-                <div class="price-item main-price">
-                    <div class="price-info">
+            <div class="price-list">
+                <div class="price-row main">
+                    <div class="price-label">
                         <h4>LED-Show Komplett</h4>
-                        <p>Komplettes LED-Programm mit allen Features, Choreografie und professionellem Equipment</p>
+                        <p>3 Parts, ca. 10 Artisten, 2 Moderatoren, Techniker, Musikanlage &amp; Bühnenbild</p>
                     </div>
-                    <div class="price-tag">3.000€</div>
+                    <div class="price-amount">3.000 €</div>
                 </div>
-                
-                <div class="price-item optional">
-                    <div class="price-info">
-                        <h4>Pole Dance</h4>
-                        <p>Optional zubuchbar – Artistik-Performance als zusätzliches Highlight</p>
+                <div class="price-row included">
+                    <div class="price-label">
+                        <h4>Auf- &amp; Abbau, Auftrittszeit, Fahrtkosten</h4>
+                        <p>Kompletter Service – wir kümmern uns um alles</p>
                     </div>
-                    <div class="price-tag">+250€</div>
+                    <div class="price-amount">inklusive</div>
                 </div>
-                
-                <div class="price-item flexible">
-                    <div class="price-info">
-                        <h4>Feuereffekte</h4>
-                        <p>Optional nach Absprache – Individuelle Feuer-Elemente je nach Wunsch</p>
+                <div class="price-row optional">
+                    <div class="price-label">
+                        <h4>+ X-Pole Performance</h4>
+                        <p>Optionale Pole-Dance-Einlage in Part 1 (Erde)</p>
                     </div>
-                    <div class="price-tag">Auf Anfrage</div>
+                    <div class="price-amount">+250 €</div>
+                </div>
+
+                <div class="price-divider"></div>
+
+                <div class="price-row fire-main">
+                    <div class="price-label">
+                        <h4>🔥 Feuershow – 4. Element</h4>
+                        <p>1 Part Outdoor, ca. 15 Darsteller, ~15 Min. Auch einzeln buchbar!</p>
+                    </div>
+                    <div class="price-amount">2.500 €</div>
+                </div>
+                <div class="price-row included">
+                    <div class="price-label">
+                        <h4>Fahrtkosten Feuer (bei Kombi-Buchung)</h4>
+                        <p>Bei Buchung zusammen mit LED-Show entfallen die Fahrtkosten</p>
+                    </div>
+                    <div class="price-amount">entfallen</div>
                 </div>
             </div>
-            
             <div class="price-note">
-                <p>
-                    <strong>✓ Inklusive:</strong> Anfahrtskosten für bis zu 10 Personen im Umkreis von 70 km 
-                    sind bereits im Grundpreis enthalten. Keine versteckten Zusatzkosten!
-                </p>
+                <p><strong>Autarkes Equipment:</strong> Unsere komplette Anlage und LED-Deko läuft eigenständig – keine externe Stromquelle nötig. Fahrtkosten für bis zu 5 Fahrzeuge im Umkreis sind im Preis enthalten.</p>
+            </div>
+            <div class="price-note fire-note" style="margin-top: 10px;">
+                <p><strong>Kombi-Vorteil:</strong> Bei gemeinsamer Buchung von LED-Show + Feuershow entfallen die separaten Fahrtkosten der Feuershow (Ersparnis: 250 €).</p>
             </div>
         </div>
     </section>
-    
+
+    <!-- Sicherheit / AGB -->
+    <section class="safety-section">
+        <div class="safety-card reveal">
+            <h3>🛡️ Sicherheit &amp; Vertragsbedingungen</h3>
+            <p>Für unsere Feuershow gelten besondere Sicherheitsvorschriften gemäß unserer Allgemeinen Vertragsbedingungen (AGB). Sicherheit hat bei uns oberste Priorität.</p>
+            <ul class="safety-list">
+                <li>Mindestens 3 Meter Sicherheitsabstand zum Publikum</li>
+                <li>Bühnenfläche: min. 12m × 16m, eben, frei von entzündlichen Gegenständen</li>
+                <li>Feuerlöscher &amp; Brandschutzanmeldung durch den Veranstalter</li>
+                <li>Sicherheitskonzept mit Flucht- und Rettungswegen erforderlich</li>
+                <li>Wetterabhängig – bei widrigen Bedingungen behalten wir uns den Abbruch vor</li>
+            </ul>
+            <p style="margin-top: 15px; font-size: 0.82rem; color: #888;">Die vollständigen AGB werden dem Angebot als separate Anlage beigefügt.</p>
+        </div>
+    </section>
+
+    <!-- Features -->
     <section class="features">
-        <h2 class="section-title">Warum unsere Shows begeistern</h2>
+        <h2 class="section-title reveal">Warum Odins Hörner?</h2>
         <div class="features-grid">
-            <div class="feature-item">
-                <h4>🎭 Professionelles Team</h4>
-                <p>Erfahrene Künstler mit jahrelanger Bühnenerfahrung und höchsten Sicherheitsstandards.</p>
+            <div class="feat-item reveal">
+                <h4>Erfahrenes Ensemble</h4>
+                <p>Bis zu 15 erfahrene Artisten und Performer mit professionellem Equipment und Leidenschaft für die Bühne.</p>
             </div>
-            
-            <div class="feature-item">
-                <h4>🎨 Maßgeschneidert</h4>
-                <p>Jede Performance wird individuell auf euer Event, eure Location und eure Wünsche abgestimmt.</p>
+            <div class="feat-item reveal">
+                <h4>Maßgeschneidert</h4>
+                <p>Jede Show wird individuell auf Ihr Event abgestimmt – vom Baumarkt bis zum Firmenjubiläum, von Indoor bis Open Air.</p>
             </div>
-            
-            <div class="feature-item">
-                <h4>🎪 Vielseitig Einsetzbar</h4>
-                <p>Perfekt für Hochzeiten, Firmenfeiern, Geburtstage, Festivals und private Events jeder Art.</p>
+            <div class="feat-item reveal">
+                <h4>Rundum-Sorglos</h4>
+                <p>Technik, Musik, Auf- und Abbau – alles inklusive. Autarkes Equipment, keine externe Stromversorgung nötig.</p>
             </div>
-            
-            <div class="feature-item">
-                <h4>🌟 Unvergessliche Momente</h4>
-                <p>Wir schaffen magische Erinnerungen, die eure Gäste noch lange begleiten werden.</p>
+            <div class="feat-item reveal">
+                <h4>Wikinger-Tradition trifft Moderne</h4>
+                <p>Seit 2008 verbinden wir mittelalterliche Feuerkunst mit moderner LED-Technologie zu einzigartigen Shows aus Niederbayern.</p>
             </div>
         </div>
     </section>
-    
-    <section class="cta-section">
-        <h2>Lasst uns gemeinsam Magie erschaffen</h2>
-        <p>
-            Jedes Event ist einzigartig – genau wie die Show, die wir für euch kreieren. 
-            Verwandelt euren besonderen Moment in ein unvergessliches Lichtspektakel.
-        </p>
+
+    <!-- CTA -->
+    <section class="cta">
+        <h2>Bereit für ein Lichtspektakel?</h2>
+        <p>Lassen Sie uns gemeinsam Ihre Veranstaltung in ein unvergessliches Erlebnis aus Licht, Tanz und Feuer verwandeln.</p>
+        <button class="cta-link" onclick="document.getElementById('contactModal').classList.add('active')">Jetzt anfragen</button>
     </section>
+
+    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contactModal" onclick="if(event.target===this)this.classList.remove('active')">
+        <div class="modal-card">
+            <button class="modal-close" onclick="document.getElementById('contactModal').classList.remove('active')">&times;</button>
+            <img src="Fotos/8.jpg" alt="LED-Bühnenshow" class="modal-photo">
+            <div class="modal-photo-overlay"></div>
+            <div class="modal-body">
+                <h3>Barbara Schickaneder</h3>
+                <p class="modal-role">Showbeauftragte – Odins Hörner e.V.</p>
+                <a href="tel:+4915125214437" class="modal-contact-item">
+                    <span class="modal-contact-icon">📞</span>
+                    <div class="modal-contact-text">
+                        <span class="label">Telefon</span>
+                        <span class="value">0151 / 252 144 37</span>
+                    </div>
+                </a>
+                <a href="mailto:barbara.hochecker@googlemail.com" class="modal-contact-item">
+                    <span class="modal-contact-icon">✉️</span>
+                    <div class="modal-contact-text">
+                        <span class="label">E-Mail</span>
+                        <span class="value">barbara.hochecker@googlemail.com</span>
+                    </div>
+                </a>
+                <a href="https://www.xn--odins-hrner-xfb.de/" target="_blank" rel="noopener" class="modal-contact-item">
+                    <span class="modal-contact-icon">🌐</span>
+                    <div class="modal-contact-text">
+                        <span class="label">Website</span>
+                        <span class="value">www.odins-hörner.de</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>
+            <img src="Logo.jpg" alt="Logo" style="width: 30px; height: 30px; vertical-align: middle; border-radius: 50%; margin-right: 8px;">
+            Odins Hörner e.V. · Hochaich 1, 84385 Egglham<br>
+            <a href="https://www.xn--odins-hrner-xfb.de/" target="_blank" rel="noopener">www.odins-hörner.de</a>
+            · Mittelalterlicher Kulturverein seit 2008<br>
+            <span style="color: #444; font-size: 0.72rem;">Es gelten unsere Allgemeinen Vertragsbedingungen (AGB) – werden dem Angebot als Anlage beigefügt.</span>
+        </p>
+    </footer>
+
+    <script>
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+        reveals.forEach(el => observer.observe(el));
+    </script>
 </body>
 </html>
